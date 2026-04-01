@@ -48,4 +48,5 @@ To generate a signed APK for distribution:
  * Locate your file in app/release/app-release.apk.
 
 🤝 Contributing
+
 Contributions make the open-source community an amazing place to learn and create.
