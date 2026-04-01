@@ -5,7 +5,7 @@ coreKtx = "1.17.0"
 appcompat = "1.7.1"
 material = "1.13.0"
 constraintlayout = "2.2.1"
-androidx-splashscreen = "1.0.1"
+androidx-splashscreen = "1.2.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
