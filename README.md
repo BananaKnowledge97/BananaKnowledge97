@@ -12,6 +12,7 @@ A lightweight, high-performance native Android wrapper for **BananaKnowledge97.i
 - **⚡ Instant Loading:** Optimized WebView cache for a snappier feel.
 - **📱 Responsive Layout:** Forced mobile-view optimization.
 - **🌐 Progress Tracking:** Built-in loading bar so users never guess the status.
+- **🖱️ Context Menu:** Implemented Context Menu for Text and link copy and also for downloading image files or any other file 
 
 ---
 
@@ -25,7 +26,7 @@ A lightweight, high-performance native Android wrapper for **BananaKnowledge97.i
 ### Getting Started
 1. **Clone the project:**
    ```bash
-   git clone [https://github.com/yourusername/bananaknowledge-android.git](https://github.com/yourusername/bananaknowledge-android.git)
+   git clone https://github.com/BananaKnowledge97/BananaKnowledge97.git
 
  * Open in Android Studio:
    Select "Open an Existing Project" and point to the directory.
@@ -38,12 +39,14 @@ A lightweight, high-performance native Android wrapper for **BananaKnowledge97.i
 |---|---|
 | AndroidManifest.xml | Internet permissions & App Icon |
 | Colors.xml | Adjust Primary/Secondary brand colors |
-| MainActivity.kt | WebView logic & Back-button handling |
+| MainActivity.kt | WebView logic & Back-button handling & Context Menu Logic|
 
 🚀 Deployment
 To generate a signed APK for distribution:
  * Go to Build > Generate Signed Bundle / APK.
  * Follow the wizard to create a Keystore.
  * Locate your file in app/release/app-release.apk.
+
 🤝 Contributing
+
 Contributions make the open-source community an amazing place to learn and create.
