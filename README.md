@@ -39,6 +39,7 @@ A lightweight, high-performance native Android wrapper for **BananaKnowledge97.i
 | AndroidManifest.xml | Internet permissions & App Icon |
 | Colors.xml | Adjust Primary/Secondary brand colors |
 | MainActivity.kt | WebView logic & Back-button handling |
+
 🚀 Deployment
 To generate a signed APK for distribution:
  * Go to Build > Generate Signed Bundle / APK.
