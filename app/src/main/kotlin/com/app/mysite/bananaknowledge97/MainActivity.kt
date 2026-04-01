@@ -16,6 +16,15 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import android.app.DownloadManager
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.os.Environment
+import android.view.ContextMenu
+import android.view.MenuItem
+import android.webkit.URLUtil
+import android.widget.Toast
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         btnRetry = findViewById(R.id.btnRetry)
 
         setupWebView()
+        registerForContextMenu(webView)
 
         btnRetry.setOnClickListener { tryLoading() }
         tryLoading()
@@ -145,4 +155,88 @@ class MainActivity : AppCompatActivity() {
         val caps = cm.getNetworkCapabilities(network) ?: return false
         return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
+    
+    
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+    super.onCreateContextMenu(menu, v, menuInfo)
+
+    val result = webView.hitTestResult
+    val extra = result.extra ?: return // The URL or Image source
+
+    // SCENARIO 1: It's a plain Image (not clickable)
+    if (result.type == WebView.HitTestResult.IMAGE_TYPE) {
+        menu?.setHeaderTitle("Image Options")
+        addDownloadOption(menu, extra)
+        addCopyOption(menu, extra, "Copy Image Link")
+        addShareOption(menu, extra)
+    } 
+    
+    // SCENARIO 2: It's a Link (text link)
+    else if (result.type == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
+        menu?.setHeaderTitle("Link Options")
+        addBrowserOption(menu, extra)
+        addCopyOption(menu, extra, "Copy Link")
+        addShareOption(menu, extra)
+    }
+
+    // SCENARIO 3: It's an Image that is ALSO a Link (Clickable Banner)
+    else if (result.type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+        menu?.setHeaderTitle("Image Link Options")
+        addDownloadOption(menu, extra) // Downloads the image
+        addBrowserOption(menu, extra)  // Opens the link destination
+        addCopyOption(menu, extra, "Copy Link")
+        addShareOption(menu, extra)
+    }
+}
+
+// 1. Action: Download
+private fun addDownloadOption(menu: ContextMenu?, url: String) {
+    menu?.add(0, 1, 0, "Download Image")?.setOnMenuItemClickListener {
+        try {
+            val request = DownloadManager.Request(Uri.parse(url))
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            val fileName = URLUtil.guessFileName(url, null, null)
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+            
+            val dm = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+            dm.enqueue(request)
+            Toast.makeText(this, "Download Started...", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+        true
+    }
+}
+
+// 2. Action: Copy to Clipboard
+private fun addCopyOption(menu: ContextMenu?, url: String, label: String) {
+    menu?.add(0, 2, 0, label)?.setOnMenuItemClickListener {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(ClipData.newPlainText("URL", url))
+        Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+        true
+    }
+}
+
+// 3. Action: Share
+private fun addShareOption(menu: ContextMenu?, url: String) {
+    menu?.add(0, 3, 0, "Share")?.setOnMenuItemClickListener {
+        val i = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, url)
+        }
+        startActivity(Intent.createChooser(i, "Share via"))
+        true
+    }
+}
+
+// 4. Action: Open in External Browser
+private fun addBrowserOption(menu: ContextMenu?, url: String) {
+    menu?.add(0, 4, 0, "Open in Browser")?.setOnMenuItemClickListener {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        true
+    }
+}
+
+
 }
