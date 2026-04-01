@@ -63,4 +63,5 @@ dependencies {
     implementation libs.material
     implementation libs.androidx.constraintlayout
     implementation(libs.androidx.core.splashscreen)
+    implementation("androidx.browser:browser:1.8.0")
 }

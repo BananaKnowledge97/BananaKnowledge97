@@ -1,9 +1,11 @@
 package com.app.mysite.bananaknowledge97
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.webkit.*
@@ -12,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class MainActivity : AppCompatActivity() {
@@ -22,34 +25,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRetry: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // 1. Install Splash Screen (Must be before super.onCreate)
         installSplashScreen()
-        
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 2. Initialize Views
         webView = findViewById(R.id.webView)
         progressBar = findViewById(R.id.progressBar)
         layoutOffline = findViewById(R.id.layoutOffline)
         btnRetry = findViewById(R.id.btnRetry)
 
-        // 3. Configure WebView
         setupWebView()
 
-        // 4. Set Retry Action
         btnRetry.setOnClickListener { tryLoading() }
-
-        // 5. Initial Load
         tryLoading()
 
-        // 6. Modern Back Navigation (Fixes the Deprecation Warning)
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (webView.canGoBack()) {
-                    webView.goBack() // Navigate back in web history
+                    webView.goBack()
                 } else {
-                    // No more web history, allow the system to exit the app
                     isEnabled = false 
                     onBackPressedDispatcher.onBackPressed() 
                 }
@@ -67,18 +61,54 @@ class MainActivity : AppCompatActivity() {
         }
 
         webView.webViewClient = object : WebViewClient() {
+            
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                val url = request?.url.toString()
+                val host = request?.url?.host
+
+                // 1. STAY: Keep your website links inside the app
+                if (host != null && host.contains("bananaknowledge97.in")) {
+                    return false 
+                }
+
+                // 2. JUMP: Instant-open popular apps if installed
+                if (url.contains("youtube.com") || url.contains("youtu.be") || 
+                    url.contains("t.me") || url.startsWith("tg://") || 
+                    url.startsWith("whatsapp://") || 
+                    url.contains("facebook.com") || 
+                    url.contains("instagram.com") || 
+                    url.contains("twitter.com") || url.contains("x.com")) {
+                    
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        startActivity(intent)
+                        return true 
+                    } catch (e: Exception) {
+                        // If app isn't installed, let it fall through to Step 3
+                    }
+                }
+
+                // 3. SLIDE: Use Custom Tabs for all other external links
+                try {
+                    val builder = CustomTabsIntent.Builder()
+                    builder.setShowTitle(true)
+                    val customTabsIntent = builder.build()
+                    customTabsIntent.launchUrl(this@MainActivity, Uri.parse(url))
+                    return true
+                } catch (e: Exception) {
+                    // Ultimate fallback to system browser
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    startActivity(intent)
+                    return true
+                }
+            }
+
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
-                // Optional: Fade in the WebView for a smooth transition
                 webView.animate().alpha(1.0f).setDuration(300).start()
             }
 
-            override fun onReceivedError(
-                view: WebView?, 
-                request: WebResourceRequest?, 
-                error: WebResourceError?
-            ) {
-                // Show offline layout if the main page fails to load
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                 if (request?.isForMainFrame == true) {
                     showError()
                 }
