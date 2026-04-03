@@ -8,24 +8,22 @@ android {
     namespace 'com.app.mysite.bananaknowledge97'
     compileSdk 36
     
+    Properties localProperties = new Properties()
+    File localPropertiesFile = rootProject.file('local.properties')
+    if (localPropertiesFile.exists()) {
+        localProperties.load(new FileInputStream(localPropertiesFile))
+    }
+
     signingConfigs {
         release {
-            // Specify the name of your keystore file
-            // The file must be located in your module directory
             storeFile file("signing-key.jks")
-
-            // The keystore password
-            storePassword "Password123"
-
-            // The key alias, same as the one you specified with '-alias' argument while creating the keystore
-            keyAlias "myAlias"
-
-            // The key password
-            keyPassword "Password123"
+            // 2. Use the variables from the file
+            storePassword localProperties.getProperty('RELEASE_STORE_PASSWORD')
+            keyAlias localProperties.getProperty('RELEASE_KEY_ALIAS')
+            keyPassword localProperties.getProperty('RELEASE_KEY_PASSWORD')
         }
+    }
 
-    
-                            }
     defaultConfig {
         applicationId 'com.app.mysite.bananaknowledge97'
         minSdk 26
@@ -63,5 +61,5 @@ dependencies {
     implementation libs.material
     implementation libs.androidx.constraintlayout
     implementation(libs.androidx.core.splashscreen)
-    implementation("androidx.browser:browser:1.8.0")
+    implementation("androidx.browser:browser:1.10.0")
 }

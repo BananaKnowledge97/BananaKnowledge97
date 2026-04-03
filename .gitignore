@@ -9,3 +9,7 @@
 
 # Ignore Gradle build output directory
 build
+# Ignore the key Below locations and extensions
+local.properties
+*.jks
+*.keystore
