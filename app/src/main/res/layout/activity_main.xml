@@ -7,17 +7,7 @@
     android:fitsSystemWindows="true"
     android:background="#FFFFFF">
 
-    <ProgressBar
-    android:id="@+id/progressBar"
-    style="?android:attr/progressBarStyleLarge"
-    android:layout_width="60dp"
-    android:layout_height="60dp"
-    android:indeterminateTint="#2196F3" 
-    android:visibility="gone"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
+ 
 
 
     <WebView
@@ -59,5 +49,17 @@
             android:layout_marginTop="24dp"
             android:text="Try Again" />
     </LinearLayout>
+    
+   <ProgressBar
+    android:id="@+id/progressBar"
+    style="?android:attr/progressBarStyleLarge"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:indeterminateTint="#2196F3" 
+    android:visibility="gone"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
