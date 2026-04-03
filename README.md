@@ -1,52 +1,63 @@
-# 🍌 BananaKnowledge97 Android Wrapper
+# 🍌 BananaKnowledge97: Native Android Wrapper
+![Android](https://img.shields.io/badge/Platform-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Language-Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
 
-![Android](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
-![Kotlin](https://img.shields.io/badge/Language-Kotlin-purple.svg)
-
-A lightweight, high-performance native Android wrapper for **BananaKnowledge97.in**. This app provides a seamless mobile experience by rendering the web platform within a native container.
-
----
-
-## ✨ Key Features
-
-- **⚡ Instant Loading:** Optimized WebView cache for a snappier feel.
-- **📱 Responsive Layout:** Forced mobile-view optimization.
-- **🌐 Progress Tracking:** Built-in loading bar so users never guess the status.
-- **🖱️ Context Menu:** Implemented Context Menu for Text and link copy and also for downloading image files or any other file 
+A high-performance, Kotlin-based Android application that transforms the [BananaKnowledge97.in](https://bananaknowledge97.in) web experience into a native mobile environment. Built with security, speed, and modern Android APIs in mind.
 
 ---
 
-## 🛠️ Installation & Setup
+## 🚀 Key Features
 
-### Prerequisites
-* Android Studio Ladybug or newer
-* JDK 17
-* Android SDK (API 21+)
+| Feature | Description |
+| :--- | :--- |
+| **Hardware Acceleration** | GPU-optimized rendering for smooth scrolling of Website. |
+| **Smart Navigation** | Internal links stay in-app; external links use **Chrome Custom Tabs**. |
+| **Deep-Linking** | Instant redirection for YouTube, WhatsApp, Telegram, and X (Twitter). |
+| **Native Context Menu** | Long-press to **Download Images**, **Copy Links**, or **Share** content. |
+| **Lifecycle Aware** | Advanced `OnBackPressedDispatcher` logic prevents accidental app exits. |
+| **Offline Ready** | Custom "No Connection" UI with a one-tap retry mechanism. |
+| **Modern UI** | Supports Android 12+ Splash Screen API and Material Design 3. |
 
-### Getting Started
-1. **Clone the project:**
-   ```bash
-   git clone https://github.com/BananaKnowledge97/BananaKnowledge97.git
+---
 
- * Open in Android Studio:
-   Select "Open an Existing Project" and point to the directory.
- * Customize URL:
-   Open Strings.xml and update the base URL:
-   <string name="website_url">[https://bananaknowledge97.in](https://bananaknowledge97.in)</string>
+## 🛠️ Configuration & Customization
 
-⚙️ Configuration
-| File | Purpose |
-|---|---|
-| AndroidManifest.xml | Internet permissions & App Icon |
-| Colors.xml | Adjust Primary/Secondary brand colors |
-| MainActivity.kt | WebView logic & Back-button handling & Context Menu Logic|
+### 1. Changing the Base URL
+To point the app to a different domain or a development server, update the `loadUrl` string in `MainActivity.kt`:
 
-🚀 Deployment
-To generate a signed APK for distribution:
- * Go to Build > Generate Signed Bundle / APK.
- * Follow the wizard to create a Keystore.
- * Locate your file in app/release/app-release.apk.
+```kotlin
+private fun tryLoading() {
+    if (isNetworkAvailable()) {
+        // Edit this URL to change the app's target website
+        webView.loadUrl("[https://bananaknowledge97.in](https://bananaknowledge97.in)") 
+    } else {
+        showError()
+    }
+}
 
-🤝 Contributing
+```
+## 2. Signing Keys & Security (Critical)
+This project follows industry-standard security practices by keeping sensitive credentials out of the version history.
+ * Create a local.properties file in the project root.
+ * Add your private keystore details (this file is ignored by .gitignore):
+  ``` RELEASE_STORE_PASSWORD=your_secure_password
+RELEASE_KEY_ALIAS=banana_alias
+RELEASE_KEY_PASSWORD=your_secure_password ```
 
-Contributions make the open-source community an amazing place to learn and create.
+ * Note: Never push your .jks file or local.properties to public repositories.
+   
+## 📦 Technical Specifications
+ * Language: Kotlin 1.9+
+ * Build System: Gradle (Kotlin DSL / Groovy)
+ * Min SDK: 26 (Android 8.0)
+ * Target SDK: 36 (Android 16)
+ * Architecture: ViewBinding & Material 3
+## 🏗️ How to Build
+ * Clone:
+   ``` git clone https://github.com/BananaKnowledge97/BananaKnowledge97.git ```
+ * Configure: Set up your local.properties as described above.
+ * Compile: * AndroidIDE: Open the project and click the Build icon.
+   * CLI: Run ./gradlew assembleRelease to generate a signed APK.
+   * 
+## 📄 Maintenance
+Maintained by the owner of BananaKnowledge97.in. Developed using AndroidIDE and Termux.
