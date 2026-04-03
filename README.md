@@ -40,9 +40,11 @@ private fun tryLoading() {
 This project follows industry-standard security practices by keeping sensitive credentials out of the version history.
  * Create a local.properties file in the project root.
  * Add your private keystore details (this file is ignored by .gitignore):
-  ``` RELEASE_STORE_PASSWORD=your_secure_password
+  ```
+RELEASE_STORE_PASSWORD=your_secure_password
 RELEASE_KEY_ALIAS=banana_alias
-RELEASE_KEY_PASSWORD=your_secure_password ```
+RELEASE_KEY_PASSWORD=your_secure_password
+```
 
  * Note: Never push your .jks file or local.properties to public repositories.
    
