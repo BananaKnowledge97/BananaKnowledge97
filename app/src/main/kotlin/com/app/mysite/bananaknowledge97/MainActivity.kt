@@ -127,11 +127,32 @@ class MainActivity : AppCompatActivity() {
 
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                progressBar.progress = newProgress
-                progressBar.visibility = if (newProgress < 100) View.VISIBLE else View.GONE
-            }
-        }
+    // Animate the progress change for a "liquid" feel
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        progressBar.setProgress(newProgress, true)
+    } else {
+        progressBar.progress = newProgress
     }
+
+    if (newProgress < 100) {
+        progressBar.visibility = View.VISIBLE
+        progressBar.alpha = 1f
+    } else {
+        // Smoothly fade and slide out when done
+        progressBar.animate()
+            .alpha(0f)
+            .translationY(-20f) // Small upward slide
+            .setDuration(400)
+            .withEndAction { 
+                progressBar.visibility = View.GONE 
+                progressBar.translationY = 0f // Reset for next load
+            }
+            .start()
+           }
+          }
+         }
+        }
+    
 
     private fun tryLoading() {
         if (isNetworkAvailable()) {
