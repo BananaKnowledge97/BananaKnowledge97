@@ -56,10 +56,12 @@ RELEASE_KEY_PASSWORD=your_secure_password
  * Architecture: ViewBinding & Material 3
 ## 🏗️ How to Build
  * Clone:
-   ``` git clone https://github.com/BananaKnowledge97/BananaKnowledge97.git ```
+   ```
+    git clone https://github.com/BananaKnowledge97/BananaKnowledge97.git
+   ```
  * Configure: Set up your local.properties as described above.
  * Compile: * AndroidIDE: Open the project and click the Build icon.
    * CLI: Run ./gradlew assembleRelease to generate a signed APK.
-   * 
+     
 ## 📄 Maintenance
 Maintained by the owner of BananaKnowledge97.in. Developed using AndroidIDE and Termux.
