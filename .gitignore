@@ -1,0 +1,15 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore ACS editor directory
+.acside
+
+# Ignore Kotlin directory
+.kotlin
+
+# Ignore Gradle build output directory
+build
+# Ignore the key Below locations and extensions
+local.properties
+*.jks
+*.keystore
